@@ -315,7 +315,7 @@ class SimpleElasticsearch extends BaseElasticsearch
             'PUT',
             $this->elasticHost,
             '/' . $indexName . '/_mapping',
-            $mapping,
+            $mapping
         );
         return $this->decodeResponse(
             $result
@@ -337,7 +337,7 @@ class SimpleElasticsearch extends BaseElasticsearch
             'PUT',
             $this->elasticHost,
             '/_template/' . $name,
-            $template,
+            $template
         );
         return $this->decodeResponse(
             $result
