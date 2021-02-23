@@ -165,7 +165,10 @@ class SimpleElasticsearch extends BaseElasticsearch
             'from' => 0,
             'query' => $query,
         ];
-        $resultParams = array_merge($defaultParams, $params);
+        $resultParams = array_merge(
+            $defaultParams,
+            $params
+        );
         $result = $this->sendRequest(
             'POST',
             $this->elasticHost,
@@ -183,25 +186,31 @@ class SimpleElasticsearch extends BaseElasticsearch
      * @param string $indexName
      * @param array $aggregations
      * @param array $query
+     * @param array $params
      * @return mixed
      */
     public function aggregateDocuments(
         string $indexName,
         array $aggregations,
-        array $query = []
+        array $query = [],
+        array $params = []
     ) {
-        $params = [
+        $defaultParams = [
             'size' => 0,
             'aggregations' => $aggregations,
         ];
         if (!empty($query)) {
-            $params['query'] = $query;
+            $defaultParams['query'] = $query;
         }
+        $resultParams = array_merge(
+            $defaultParams,
+            $params
+        );
         $result = $this->sendRequest(
             'POST',
             $this->elasticHost,
             '/' . $indexName . '/_search',
-            $params
+            $resultParams
         );
         return $this->decodeResponse(
             $result
