@@ -289,16 +289,20 @@ class SimpleElasticsearchTest extends TestCase
             'test' => '123',
         ];
         $params = [
+            'docvalue_fields' => [],
+        ];
+        $resultParams = [
             'size' => 0,
             'aggregations' => $aggregations,
             'query' => $query,
+            'docvalue_fields' => [],
         ];
         $host = 'http://localhost:9200/';
         $simpleElasticsearch = Mockery::mock(SimpleElasticsearch::class, [$host])
             ->makePartial();
 
         $simpleElasticsearch->shouldReceive('sendRequest')
-            ->with('POST', $host, '/index/_search', $params)
+            ->with('POST', $host, '/index/_search', $resultParams)
             ->once()
             ->andReturn($response);
 
@@ -310,7 +314,8 @@ class SimpleElasticsearchTest extends TestCase
         $result = $simpleElasticsearch->aggregateDocuments(
             'index',
             $aggregations,
-            $query
+            $query,
+            $params
         );
         $this->assertIsArray($result);
     }
