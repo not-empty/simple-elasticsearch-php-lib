@@ -181,6 +181,37 @@ class SimpleElasticsearch extends BaseElasticsearch
     }
 
     /**
+     * method countDocuments
+     * count documents
+     * @param string $indexName
+     * @param array $query
+     * @param array $params
+     * @return mixed
+     */
+    public function countDocuments(
+        string $indexName,
+        array $query,
+        array $params = []
+    ) {
+        $defaultParams = [
+            'query' => $query,
+        ];
+        $resultParams = array_merge(
+            $defaultParams,
+            $params
+        );
+        $result = $this->sendRequest(
+            'POST',
+            $this->elasticHost,
+            '/' . $indexName . '/_count',
+            $resultParams
+        );
+        return $this->decodeResponse(
+            $result
+        );
+    }
+
+    /**
      * method aggregateDocuments
      * return aggregations from documents
      * @param string $indexName
