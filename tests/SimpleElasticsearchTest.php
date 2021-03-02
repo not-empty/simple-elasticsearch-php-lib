@@ -277,6 +277,41 @@ class SimpleElasticsearchTest extends TestCase
     }
 
     /**
+     * @covers SimpleElasticsearch\SimpleElasticsearch::countDocuments
+     */
+    public function testCountDocuments()
+    {
+        $response = [];
+        $query = [
+            'query' => 'test',
+        ];
+        $params = [];
+        $resultParams = [
+            'query' => $query,
+        ];
+        $host = 'http://localhost:9200/';
+        $simpleElasticsearch = Mockery::mock(SimpleElasticsearch::class, [$host])
+            ->makePartial();
+
+        $simpleElasticsearch->shouldReceive('sendRequest')
+            ->with('POST', $host, '/index/_count', $resultParams)
+            ->once()
+            ->andReturn($response);
+
+        $simpleElasticsearch->shouldReceive('decodeResponse')
+            ->with($response)
+            ->once()
+            ->andReturn($response);
+
+        $result = $simpleElasticsearch->countDocuments(
+            'index',
+            $query,
+            $params
+        );
+        $this->assertIsArray($result);
+    }
+
+    /**
      * @covers SimpleElasticsearch\SimpleElasticsearch::aggregateDocuments
      */
     public function testAggregateDocuments()
