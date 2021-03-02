@@ -1,7 +1,7 @@
 {
     "name": "kiwfy/simple-elasticsearch-php",
     "description": "PHP library to connect to and use Elasticsearch",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "type": "library",
     "license": "GPL-3.0-only",
     "require": {
