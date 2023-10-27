@@ -1,11 +1,11 @@
 {
     "name": "not-empty/simple-elasticsearch-php-lib",
     "description": "PHP library to connect to and use Elasticsearch",
-    "version": "3.0.0",
+    "version": "4.0.0",
     "type": "library",
     "license": "GPL-3.0-only",
     "require": {
-        "php": "^7.3",
+        "php": "^7.4",
         "guzzlehttp/guzzle": "^7.8"
     },
     "require-dev": {
