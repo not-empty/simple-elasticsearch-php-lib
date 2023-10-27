@@ -9,6 +9,7 @@ use Exception;
 class BaseElasticsearch
 {
     public $connectionOptions = [];
+    public $elasticHost = '';
 
     /**
      * constructor

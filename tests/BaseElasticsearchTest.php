@@ -9,6 +9,7 @@ use Mockery;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use SimpleElasticsearch\BaseElasticsearch;
+use GuzzleHttp\Psr7\Stream;
 
 class BaseElasticsearchTest extends TestCase
 {
@@ -145,7 +146,7 @@ class BaseElasticsearchTest extends TestCase
      */
     public function testSendRequest()
     {
-        $response = [];
+        $getBodySpy = Mockery::spy(Stream::class);
         $payload = [
             'headers' => [
                 'test' => 1,
@@ -161,11 +162,7 @@ class BaseElasticsearchTest extends TestCase
             ->shouldReceive('getBody')
             ->once()
             ->withAnyArgs()
-            ->andReturnSelf()
-            ->shouldReceive('getContents')
-            ->once()
-            ->withAnyArgs()
-            ->andReturn($response)
+            ->andReturn($getBodySpy)
             ->getMock();
 
         $guzzleMock = Mockery::mock(Guzzle::class);
@@ -178,7 +175,7 @@ class BaseElasticsearchTest extends TestCase
             ->makePartial();
 
         $baseElasticsearch->shouldReceive('prepareHeader')
-            ->with([ 'test' => 1 ])
+            ->with(['test' => 1])
             ->once()
             ->andReturn([
                 'headers' => [
@@ -187,7 +184,7 @@ class BaseElasticsearchTest extends TestCase
             ]);
 
         $baseElasticsearch->shouldReceive('prepareBody')
-            ->with([ 'test' => 1 ])
+            ->with(['test' => 1])
             ->once()
             ->andReturn([
                 'json' => [
@@ -220,7 +217,8 @@ class BaseElasticsearchTest extends TestCase
                 'test' => 1,
             ]
         );
-        $this->assertIsArray($result);
+        $this->assertIsString($result);
+        $this->assertEquals($result, '');
     }
 
     /**
@@ -242,12 +240,12 @@ class BaseElasticsearchTest extends TestCase
             'connect_timeout' => 5,
             'timeout' => 5,
         ];
-
+        $getBodySpy = Mockery::spy(Stream::class);
         $responseInterfaceMock = Mockery::mock(ResponseInterface::class)
             ->shouldReceive('getBody')
             ->once()
             ->withAnyArgs()
-            ->andReturn($response)
+            ->andReturn($getBodySpy)
             ->shouldReceive('getStatusCode')
             ->once()
             ->withAnyArgs()
@@ -271,7 +269,7 @@ class BaseElasticsearchTest extends TestCase
             ->makePartial();
 
         $baseElasticsearch->shouldReceive('prepareHeader')
-            ->with([ 'test' => 1 ])
+            ->with(['test' => 1])
             ->once()
             ->andReturn([
                 'headers' => [
@@ -280,7 +278,7 @@ class BaseElasticsearchTest extends TestCase
             ]);
 
         $baseElasticsearch->shouldReceive('prepareBody')
-            ->with([ 'test' => 1 ])
+            ->with(['test' => 1])
             ->once()
             ->andReturn([
                 'json' => [
@@ -346,7 +344,7 @@ class BaseElasticsearchTest extends TestCase
             ->makePartial();
 
         $baseElasticsearch->shouldReceive('prepareHeader')
-            ->with([ 'test' => 1 ])
+            ->with(['test' => 1])
             ->once()
             ->andReturn([
                 'headers' => [
@@ -355,7 +353,7 @@ class BaseElasticsearchTest extends TestCase
             ]);
 
         $baseElasticsearch->shouldReceive('prepareBody')
-            ->with([ 'test' => 1 ])
+            ->with(['test' => 1])
             ->once()
             ->andReturn([
                 'json' => [
