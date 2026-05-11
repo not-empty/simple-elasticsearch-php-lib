@@ -1,0 +1,31 @@
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.22
+    container_name: simple-elasticsearch
+    environment:
+      discovery.type: single-node
+      xpack.security.enabled: "false"
+      ES_JAVA_OPTS: -Xms512m -Xmx512m
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:9200 >/dev/null || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 20s
+
+  php:
+    build:
+      context: .
+      dockerfile: contrib/Dockerfile
+      args:
+        PHP_VERSION: 8.4-cli
+    container_name: simple-elasticsearch-php
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+    environment:
+      ELASTIC_HOST: http://elasticsearch:9200/
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    command: ["bash", "-lc", "composer install --no-dev --prefer-dist && tail -f /dev/null"]
