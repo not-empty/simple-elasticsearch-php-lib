@@ -4,7 +4,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 use SimpleElasticsearch\SimpleElasticsearch;
 
-$host = 'http://localhost:9200/';
+$host = getenv('ELASTIC_HOST') ?: 'http://localhost:9200/';
 $elastic = new SimpleElasticsearch($host);
 $elastic->setConnectionOptions([
     'connect_timeout' => 5,
@@ -190,10 +190,10 @@ for ($i = 0; $i < 60; $i++) {
     $postDocument = $elastic->postDocument(
         $indexName,
         $data,
-        $i
+        (string) $i
     );
 }
-print_r('60 documents added') . PHP_EOL;
+echo '60 documents added' . PHP_EOL;
 print_r('===================================================');
 echo PHP_EOL;
 
@@ -254,8 +254,7 @@ echo PHP_EOL;
 print_r('sql');
 echo PHP_EOL;
 $sql = $elastic->sql(
-    $query,
-    'JSON'
+    $query
 );
 print_r($sql);
 print_r('===================================================');

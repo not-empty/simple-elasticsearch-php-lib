@@ -54,7 +54,7 @@ class SimpleElasticsearch extends BaseElasticsearch
     /**
      * method sqlCursor
      * continue executing sql on elasticsearch based on cursor
-     * @param string $query
+     * @param string $cursor
      * @return mixed
      */
     public function sqlCursor(

@@ -13,7 +13,7 @@ class BaseElasticsearch
 
     /**
      * constructor
-     * @param string $elasticConfig
+     * @param string $elasticHost
      */
     public function __construct(
         string $elasticHost = 'localhost:9200'
@@ -67,8 +67,8 @@ class BaseElasticsearch
             ];
         } catch (Exception $exception) {
             return [
-                'message' => $exception->getMessage() ?? 'Request error',
-                'error_code' => $exception->getCode() ?? 500,
+                'message' => $exception->getMessage(),
+                'error_code' => $exception->getCode(),
             ];
         }
     }
